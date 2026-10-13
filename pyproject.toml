@@ -1,12 +1,38 @@
+# ============================================================
+# Configuração do projeto (padrão PEP 621).
+# O uv lê este arquivo para instalar dependências e criar o .venv.
+# ============================================================
 [project]
 name = "proj-llama-parse"
 version = "0.1.0"
-description = "Add your description here"
+description = "Extrai apenas as tabelas do resultado.pdf usando a API do LlamaParse"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
-    "llama-index>=0.14.25",
-    "llama-index-readers-file>=0.7.0",
-    "llama-parse>=0.6.94",
-    "requests>=2.34.2",
+    # llama-cloud: SDK oficial v2 da LlamaCloud (Parse v2).
+    # O pacote antigo "llama-parse" (API v1) foi descontinuado e a API v1
+    # já não está disponível para contas novas.
+    "llama-cloud>=2.8",
+    # python-dotenv: carrega as variáveis do arquivo .env para o ambiente.
+    "python-dotenv>=1.0",
 ]
+
+# ------------------------------------------------------------
+# Dependências de desenvolvimento (testes/ferramentas).
+# Instale com: uv sync --dev
+# ------------------------------------------------------------
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+]
+
+# ------------------------------------------------------------
+# Configuração do pytest.
+# Assim basta rodar `uv run pytest` sem passar caminhos.
+# ------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+# Faz o pytest enxergar o pacote `extrator` sem precisar instalar o projeto:
+# adiciona a pasta raiz do projeto ao caminho de importação (sys.path).
+pythonpath = ["."]
